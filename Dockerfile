@@ -45,4 +45,4 @@ RUN git clone --branch "$version" --depth 1 https://gitlab.com/famedly/fluffycha
 FROM nginx:alpine as release
 WORKDIR /usr/share/nginx/html
 COPY --from=builder /var/fluffy/build/ ./
-RUN sed -i '/<base href[^>]\+>/d' index.html
+#RUN sed -i '/<base href[^>]\+>/d' index.html
