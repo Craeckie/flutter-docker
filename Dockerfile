@@ -16,8 +16,7 @@ FROM cirrusci/flutter:stable AS builder
 # ENV PATH="$PATH:/app/flutter/bin"
 
 RUN flutter config --no-analytics && \
-    flutter config --enable-web && \
-    flutter precache --web
+    flutter config --enable-web
 
 #ADD https://gitlab.com/api/v4/projects/16112282/repository/branches/main /dev/null
 #RUN git clone --recurse-submodules https://gitlab.com/famedly/fluffychat.git /usr/share/nginx/html
@@ -30,7 +29,9 @@ ARG version
 #RUN curl --header "PRIVATE-TOKEN: $gitlab_access_token" "https://gitlab.com/api/v4/projects/16112282/packages/generic/fluffychat/$version/fluffychat-web.tar.gz" >fluffychat.tar.gz && \
     #tar -xvf fluffychat.tar.gz && \
     #rm fluffychat.tar.gz && \
-RUN git clone --branch "$version" --depth 1 https://gitlab.com/famedly/fluffychat.git . && \
+RUN git clone --depth 1 https://gitlab.com/famedly/fluffychat.git . && git fetch --tags && \
+    latest_release="`git describe --tags $(git rev-list --tags --max-count=10) | grep '^v' | head -1`" && \
+    git checkout "$latest_release" && \
     ./scripts/prepare-web.sh && \
     flutter build web --release
     #git checkout "$version" && \
