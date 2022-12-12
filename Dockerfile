@@ -16,7 +16,7 @@ RUN apt update && apt install -y jq && \
     url="`curl -s "https://gitlab.com/api/v4/projects/16112282/releases/" | jq -r '.[0].assets.links | .[] |select(.name == "fluffychat-web.tar.gz") | .url'`" && \
     apt remove -y jq && \
     #curl -L "https://gitlab.com/api/v4/projects/16112282/packages/generic/fluffychat/$version/fluffychat-web.tar.gz" | tar xzvf -
-    curl -L "$url" | tar xzvf -
+    echo "$url"; curl -L "$url" | tar xzvf -
     #git clone --branch "$version" --depth 1 https://gitlab.com/famedly/fluffychat.git . && \
     #./scripts/prepare-web.sh && \
     #flutter build web --release
